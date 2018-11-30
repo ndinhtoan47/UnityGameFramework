@@ -12,7 +12,6 @@ namespace Json
         public string ToJSON()
         {
             return JsonUtility.ToJson(this);
-        }
-        
+        }        
     }
 }
