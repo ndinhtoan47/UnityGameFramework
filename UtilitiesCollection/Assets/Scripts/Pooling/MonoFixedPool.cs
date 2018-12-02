@@ -1,46 +1,62 @@
 ﻿using Pooling.Interface;
-using System.Collections;
+using Singleton.Interface;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonoFixedPool<T> : IPool<T> where T : Component , IPoolable 
+namespace Pooling.Fixed
 {
-    private readonly int MaxSize;
-    private readonly Component[] pool;
-
-    private int index;
-
-    public MonoFixedPool(int argMaxSize)
+    public sealed class MonoFixedPool<T> : ISingleton, IPool<T> where T : Component, IPoolable
     {
-        pool = new T[argMaxSize];
-        for (int i = 0; i < argMaxSize; i++)
-        {
-            pool[i] = new GameObject().AddComponent(typeof(T));
-            pool[i].gameObject.SetActive(false);
-        }
-        MaxSize = argMaxSize;
-        index = 0;
-    }
+        private int MaxSize;
+        private List<GameObject> pool;
 
-    public void ReturnPool(T obj)
-    {
-        if (obj.IsBusy)
-        {
-            obj.Refresh();
-            index = (index - 1 < 0 ? 0 : index - 1);
-            obj.IsBusy = false;
-            obj.gameObject.SetActive(false);
-        }
-    }
+        public MonoFixedPool() { }
 
-    public T GetInstance()
-    {
-        if (index < MaxSize)
+        public int HashCode
         {
-            pool[index].IsBusy = true;
-            return pool[index++];
+            get
+            {
+                return this.GetHashCode();
+            }
+        }  
+
+        public void Init(int capacity = 10)
+        {
+            if (pool != null) return;
+            MaxSize = capacity;
+            pool = new List<GameObject>(MaxSize);
+            for (int i = 0; i < MaxSize; i++)
+            {
+                pool[i] = new GameObject();
+                pool[i].AddComponent(typeof(T));
+                pool[i].gameObject.SetActive(false);
+            }
         }
-        return default(T);
+
+        public void ReturnPool(T obj)
+        {
+            if (pool.Count >= MaxSize || !obj.IsBusy)
+                GameObject.Destroy(obj.gameObject);
+            if (obj.IsBusy)
+            {
+                obj.Refresh();
+                obj.IsBusy = false;
+                obj.gameObject.SetActive(false);
+                pool.Add(obj.gameObject);
+            }
+        }
+
+        public T GetInstance()
+        {
+            if (pool.Count > 0)
+            {
+                T value = pool[0].GetComponent<T>();
+                value.IsBusy = true;
+                pool.RemoveAt(0);
+                return value;
+            }
+            return null;
+        }
     }
 }
 

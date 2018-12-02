@@ -1,8 +1,8 @@
 ﻿
 namespace Singleton.Interface
 {
-    public interface ISingleton<T> where T : class
+    public interface ISingleton
     {
-        T Instance { get; }
+        int HashCode { get; }
     }
 }

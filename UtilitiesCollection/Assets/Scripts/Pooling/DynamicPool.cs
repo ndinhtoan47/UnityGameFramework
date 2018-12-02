@@ -1,26 +1,45 @@
 ﻿using Pooling.Interface;
+using Singleton.Interface;
 using System.Collections.Generic;
 
-public class DynamicPool<T> : IPool<T> where T : IPoolable, new()
+namespace Pooling.Dynamic
 {
-    private Queue<T> queue;
-
-    public DynamicPool()
+    public sealed class DynamicPool<T> : ISingleton, IPool<T> where T : IPoolable, new()
     {
-        queue = new Queue<T>();
-    }
+        private Queue<T> pool;
 
-    public T GetInstance()
-    {
-        if (queue.Count <= 0)
-            queue.Enqueue(new T());
-        return queue.Dequeue();
-    }
+        public DynamicPool() { }
 
-    public void ReturnPool(T item)
-    {
-        item.IsBusy = false;
-        item.Refresh();
-        queue.Enqueue(item);
+        public int HashCode
+        {
+            get
+            {
+                return this.GetHashCode();
+            }
+        }
+
+        public void Init(int capacity = 0)
+        {
+            if (pool != null) return;
+            pool = new Queue<T>();
+            for (int i = 0; i < capacity; i++)
+            {
+                pool.Enqueue(new T());
+            }
+        }
+
+        public T GetInstance()
+        {
+            if (pool.Count <= 0)
+                pool.Enqueue(new T());
+            return pool.Dequeue();
+        }
+
+        public void ReturnPool(T item)
+        {
+            item.IsBusy = false;
+            item.Refresh();
+            pool.Enqueue(item);
+        }
     }
 }

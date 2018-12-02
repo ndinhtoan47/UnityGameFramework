@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Singleton.Interface;
+using UnityEngine;
 
 namespace Singleton.Mono
 {
-    public sealed class MonoSingleton<T> where T : Component
+    public sealed class MonoSingleton<T> : ISingleton where T : Component
     {
         public static T Instance
         {
@@ -31,5 +32,10 @@ namespace Singleton.Mono
 
             }
         }
+
+        public int HashCode
+        {
+            get { return this.GetHashCode(); }
+        }
     }
-}   
+}

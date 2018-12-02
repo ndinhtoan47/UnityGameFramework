@@ -1,42 +1,53 @@
 ﻿using Pooling.Interface;
+using Singleton.Interface;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace Pooling
+namespace Pooling.Fixed
 {
-    public sealed class FixedPool<T> : IPool<T> where T : IPoolable, new()
+    public sealed class FixedPool<T> : ISingleton, IPool<T> where T : IPoolable, new()
     {
-        private readonly int MaxSize;
-        private readonly T[] pool;
-
-        private int index;
+        private int MaxSize;
+        private List<T> pool;
         
-        public FixedPool(int argMaxSize)
+        public int HashCode
         {
-            pool = new T[argMaxSize];
-            for (int i = 0; i < argMaxSize; i++)
+            get { return this.GetHashCode(); }
+        }
+
+        public FixedPool() { }
+
+        public void Init(int capacity = 10)
+        {
+            if (pool != null) return;
+            MaxSize = capacity;
+            pool = new List<T>(MaxSize);
+            for (int i = 0; i < MaxSize; i++)
             {
                 pool[i] = new T();
+                pool[i].Refresh();
             }
-            MaxSize = argMaxSize;
-            index = 0;
         }
 
         public void ReturnPool(T obj)
         {
+            if (pool.Count >= MaxSize || !obj.IsBusy)
+                return;
             if (obj.IsBusy)
             {
                 obj.Refresh();
-                index = (index - 1 < 0 ? 0 : index - 1);
                 obj.IsBusy = false;
+                pool.Add(obj);
             }
         }
 
         public T GetInstance()
         {
-            if(index < MaxSize)
+            if(pool.Count > 0)
             {
-                pool[index].IsBusy = true;
-                return pool[index++];
+                pool[0].IsBusy = true;
+                pool.RemoveAt(0);
+                return pool[0];
             }
             return default(T);
         }
