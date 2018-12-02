@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 namespace Pooling.Interface
 {
     public interface IPoolable
@@ -8,10 +10,17 @@ namespace Pooling.Interface
         void ReturnPool();
     }
 
-    public interface IPool<T> where T : IPoolable
+    public interface IPrototypePool<T> where T : IPoolable
     {
         void Init(int capacity);
         void ReturnPool(T item);
         T GetInstance();
+    }
+
+    public interface IPrefabPool
+    {
+        void Init(GameObject prefab, int capacity);
+        void ReturnPool(GameObject item);
+        GameObject GetInstance();
     }
 }

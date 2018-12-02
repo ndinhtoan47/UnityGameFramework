@@ -4,7 +4,11 @@ using System.Collections.Generic;
 
 namespace Pooling.Dynamic
 {
-    public sealed class DynamicPool<T> : ISingleton, IPool<T> where T : IPoolable, new()
+    /// <summary>
+    ///  For GameObject has only one T Component unless may be occur exception
+    /// </summary>
+    /// <typeparam name="T">IPoolable component</typeparam>
+    public sealed class DynamicPool<T> : ISingleton, IPrototypePool<T> where T : IPoolable, new()
     {
         private Queue<T> pool;
 
@@ -12,10 +16,7 @@ namespace Pooling.Dynamic
 
         public int HashCode
         {
-            get
-            {
-                return this.GetHashCode();
-            }
+            get { return this.GetHashCode(); }
         }
 
         public void Init(int capacity = 0)
@@ -32,7 +33,9 @@ namespace Pooling.Dynamic
         {
             if (pool.Count <= 0)
                 pool.Enqueue(new T());
-            return pool.Dequeue();
+            T value = pool.Dequeue();
+            value.IsBusy = true;
+            return value;
         }
 
         public void ReturnPool(T item)

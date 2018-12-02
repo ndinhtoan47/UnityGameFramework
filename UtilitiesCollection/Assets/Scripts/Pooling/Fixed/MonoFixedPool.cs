@@ -5,7 +5,11 @@ using UnityEngine;
 
 namespace Pooling.Fixed
 {
-    public sealed class MonoFixedPool<T> : ISingleton, IPool<T> where T : Component, IPoolable
+    /// <summary>
+    /// For Unity GameObject which has at least 1 T component unless may be occur exception
+    /// </summary>
+    /// <typeparam name="T">IPoolable component</typeparam>
+    public sealed class MonoFixedPool<T> : ISingleton, IPrototypePool<T> where T : Component, IPoolable
     {
         private int MaxSize;
         private List<GameObject> pool;

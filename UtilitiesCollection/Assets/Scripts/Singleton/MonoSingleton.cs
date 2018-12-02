@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace Singleton.Mono
 {
+    /// <summary>
+    /// For class inherited Unity Component
+    /// </summary>
+    /// <typeparam name="T">ISingleton component</typeparam>
     public sealed class MonoSingleton<T> : ISingleton where T : Component
     {
         public static T Instance

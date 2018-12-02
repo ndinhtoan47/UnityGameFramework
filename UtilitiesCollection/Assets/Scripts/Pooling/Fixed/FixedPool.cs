@@ -5,7 +5,11 @@ using UnityEngine;
 
 namespace Pooling.Fixed
 {
-    public sealed class FixedPool<T> : ISingleton, IPool<T> where T : IPoolable, new()
+    /// <summary>
+    /// For prototype class which does not inherit Unity Component
+    /// </summary>
+    /// <typeparam name="T">Type of class</typeparam>
+    public sealed class FixedPool<T> : ISingleton, IPrototypePool<T> where T : IPoolable, new()
     {
         private int MaxSize;
         private List<T> pool;
