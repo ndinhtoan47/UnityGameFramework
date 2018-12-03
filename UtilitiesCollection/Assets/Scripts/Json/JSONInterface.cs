@@ -1,9 +1,8 @@
 ﻿
 namespace Json.Interface
 {
-    interface IJSON<T>
+    public interface IJSON
     {
-        T FromJSON();
         string ToJSON();
     }
 }

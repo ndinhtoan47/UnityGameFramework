@@ -5,13 +5,16 @@ using UnityEngine;
 
 namespace Json
 {
-    public abstract class JSONBase : IJSON<JSONBase>
+    public abstract class JSONBase : IJSON
     {
-        public abstract JSONBase FromJSON();
+        public static T FromJSON<T>(string json) where T : IJSON, new()
+        {
+            return JsonUtility.FromJson<T>(json);
+        }
 
         public string ToJSON()
         {
             return JsonUtility.ToJson(this);
-        }        
+        }
     }
 }
