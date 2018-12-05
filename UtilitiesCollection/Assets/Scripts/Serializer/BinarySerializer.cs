@@ -20,44 +20,97 @@ namespace Serializer
             formatter = new BinaryFormatter();
         }
 
-        public void Serialize(string filePath, FileMode mode, object ins, bool clearExistFile = false)
+       public void StringSerialize(string filePath, string value)
         {
             try
             {
-                using (Stream stream = new FileStream(filePath, mode, FileAccess.Write, FileShare.None))
+                using (Stream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    if (clearExistFile)
-                        stream.Flush();
-                    formatter.Serialize(stream, ins);
+                    formatter.Serialize(stream, value);
                     stream.Close();
                 }
             }
             catch { }
         }
 
-        public void Serialize<T>(string filePath, FileMode mode, T ins, bool clearExistFile = false) where T : ISerializable
+        public void PrimarySerialize<T>(string filePath, T value)
+            where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable
         {
             try
             {
-                using (Stream stream = new FileStream(filePath, mode, FileAccess.Write, FileShare.None))
+                using (Stream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    if (clearExistFile)
-                        stream.Flush();
-                    formatter.Serialize(stream, ins);
+                    formatter.Serialize(stream, value);
                     stream.Close();
                 }
             }
             catch { }
         }
 
-        public object Deserialize(string filePath)
+        public void PrimarySerialize<T, Collection>(string filePath, Collection value)
+            where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable
+            where Collection : ICollection<T>
         {
-            object result = null;
+            try
+            {
+                using (Stream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    formatter.Serialize(stream, value);
+                    stream.Close();
+                }
+            }
+            catch { }
+        }
+
+        public string StringDeserialize(string filePath)
+        {
+            string result = null;
             try
             {
                 using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
                 {
-                    result = formatter.Deserialize(stream);
+                    result = (string)formatter.Deserialize(stream);
+                    stream.Close();
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.ToString());
+            }
+            return result;
+        }
+
+        public T PrimaryDeserialize<T>(string filePath)
+            where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable
+        {
+            T result = default(T);
+            try
+            {
+                using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    result = (T)formatter.Deserialize(stream);
+                    stream.Close();
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.ToString());
+            }
+            return result;
+        }
+
+        public Collection PrimaryDeserialize<T, Collection>(string filePath)
+           where T : struct, IComparable, IComparable<T>, IConvertible, IEquatable<T>, IFormattable
+           where Collection : ICollection<T>
+        {
+            Collection result = default(Collection);
+            try
+            {
+                using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    result = (Collection)formatter.Deserialize(stream);
                     stream.Close();
                 }
             }
@@ -65,7 +118,36 @@ namespace Serializer
             return result;
         }
 
-        public T Deserialize<T>(string filePath) where T : ISerializable
+        public void CustomSerialize<T>(string filePath, T value) where T : ISerializable
+        {
+            try
+            {
+                using (Stream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    formatter.Serialize(stream, value);
+                    stream.Close();
+                }
+            }
+            catch { }
+        }
+          
+        public void CustomSerialize<T, Collection>(string filePath, Collection value)
+           where T : ISerializable
+           where Collection : ICollection<T>
+        {
+            try
+            {
+                using (Stream stream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    formatter.Serialize(stream, value);
+                    stream.Close();
+                }
+            }
+            catch { }
+        }
+
+        public T CustomDeserialize<T>(string filePath)
+           where T : ISerializable
         {
             T result = default(T);
             try
@@ -79,24 +161,6 @@ namespace Serializer
             catch { }
             return result;
         }
-
-        public ICollection<object> CollectionDeserialize(string filePath)
-        {
-            try
-            {
-                using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
-                {
-                    ICollection<object> result = null;
-                    result = (ICollection<object>)formatter.Deserialize(stream);
-                    stream.Close();
-                    return result;
-                }
-            }
-            catch { return null; }
-        }
-
-        public ICollection<T> CollectionDeserialize<T>(string filePath) where T : ISerializable
-        {
             try
             {
                 using (Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.None))
