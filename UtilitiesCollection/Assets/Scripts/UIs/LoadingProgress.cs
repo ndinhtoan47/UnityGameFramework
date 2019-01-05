@@ -28,9 +28,9 @@ namespace UI
             asyncOperation = SceneManager.LoadSceneAsync(index);
             asyncOperation.allowSceneActivation = false;
 
-            while (!asyncOperation.isDone || Progress < 1f)
+            while (Progress < 1f)
             {
-                Progress = asyncOperation.progress % 0.9f;
+                Progress = asyncOperation.progress;
                 yield return null;
             }
             IsDone = true;
