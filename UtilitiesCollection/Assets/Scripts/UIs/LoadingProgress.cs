@@ -30,7 +30,7 @@ namespace UI
 
             while (Progress < 1f)
             {
-                Progress = asyncOperation.progress;
+                Progress = asyncOperation.progress / 0.9f;
                 yield return null;
             }
             IsDone = true;
