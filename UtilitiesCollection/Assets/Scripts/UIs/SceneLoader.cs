@@ -4,21 +4,27 @@ using UnityEngine.SceneManagement;
 
 namespace UI
 {
-    public class LoadingProgress : MonoBehaviour
+    public sealed class SceneLoader : MonoBehaviour
     {
+        public static SceneLoader Instance { get; private set; }
         private AsyncOperation asyncOperation;
 
-        public bool IsDone { get; private set; }
+        public bool IsActiveDone { get; private set; }
         public float Progress { get; private set; }
 
         private void Awake()
         {
-            DontDestroyOnLoad(gameObject);
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else Destroy(Instance.gameObject);
         }
 
         public void LoadScene(int index)
         {
-            IsDone = false;
+            IsActiveDone = false;
             Progress = 0.0f;
             StartCoroutine(StartLoadScene(index));
         }
@@ -28,12 +34,13 @@ namespace UI
             asyncOperation = SceneManager.LoadSceneAsync(index);
             asyncOperation.allowSceneActivation = false;
 
-            while (!asyncOperation.isDone || Progress < 1f)
+            while (Progress < 1f || !asyncOperation.isDone)
             {
-                Progress = asyncOperation.progress % 0.9f;
+                Progress = (asyncOperation.progress / 0.9f);
                 yield return null;
             }
-            IsDone = true;
+
+            IsActiveDone = true;
             yield break;
         }
 
