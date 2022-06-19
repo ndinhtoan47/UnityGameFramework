@@ -3,15 +3,9 @@
 	using System;
 	using System.Collections.Generic;
 
-	enum CreateType
-	{
-		Method,
-	}
-
 	public class Pooling<T> where T : IPoolable
 	{
 		private int _id = int.MinValue;
-		private CreateType _createType;
 		private Func<T> _createMethod;
 		private Queue<T> _freeObjects = new Queue<T>();
 		private Dictionary<int, T> _busyObjects = new Dictionary<int, T>();
@@ -19,9 +13,7 @@
 		private Pooling(Func<T> createMethod)
 		{
 			_createMethod = createMethod;
-			_createType = CreateType.Method;
 		}
-
 		public T GetFreeObject()
 		{
 			T res = default;
