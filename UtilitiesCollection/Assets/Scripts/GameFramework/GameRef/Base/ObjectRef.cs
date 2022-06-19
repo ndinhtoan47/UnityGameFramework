@@ -27,5 +27,20 @@
 				return 0;
 			}
 		}
+	
+		public virtual int FindIndex(System.Func<T, bool> predict)
+		{
+			if (predict != null && _objs != null)
+			{
+				for (int i = 0; i < _objs.Length; i++)
+				{
+					if (predict.Invoke(_objs[i]))
+					{
+						return i;
+					}
+				}
+			}
+			return -1;
+		}
 	}
 }

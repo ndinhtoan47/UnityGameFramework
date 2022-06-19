@@ -25,17 +25,12 @@ public class SpriteRef : ObjectRef<UnityEngine.Sprite>
 		}
 		return null;
 	}
-    public int GetIndex(Sprite spr)
-	{ 
-        for(int i = 0; i < _objs.Length; i++)
-		{
-			if (spr == _objs[i])
-			{
-				return i;
-			}
-		}
-		return -1;
-    }
+
+	public override int FindIndex(System.Func<Sprite, bool> predict)
+	{
+		InternalInit();
+		return base.FindIndex(predict);
+	}
 	private void InternalInit()
 	{
 		if (_objs != null && _spriteDict == null)
