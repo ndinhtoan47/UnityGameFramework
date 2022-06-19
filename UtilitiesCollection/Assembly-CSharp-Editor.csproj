@@ -36,11 +36,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets/Editor/Inspector/EditorToggle.cs" />
-     <Compile Include="Assets/Editor/Inspector/EditorSliderWithBtn.cs" />
-     <Compile Include="Assets/Editor/Inspector/EditorGUIBase.cs" />
-     <Compile Include="Assets/Editor/Inspector/EditorGUI.cs" />
-     <Compile Include="Assets/Editor/Inspector/EditorHorizontalInfo.cs" />
+     <Compile Include="Assets/Scripts/GameFramework/Editor/ReferenceFinder/ReferenceFinder.cs" />
     <Reference Include="UnityEngine">
         <HintPath>/Applications/Unity Engine/2020.3.25f1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
