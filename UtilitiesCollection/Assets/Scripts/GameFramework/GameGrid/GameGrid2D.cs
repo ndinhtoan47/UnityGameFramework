@@ -97,7 +97,32 @@
 
 			return GetPosition(x, z);
 		}
+		
+		public Vector2Int GetGridIndex(Vector3 point)
+		{
+			if (SizeOfCell == 0 || (IsCachePoints && _points == null))
+			{
+				return Vector2Int.one * -1;
+			}
+			if (Width == 0 || Height == 0 || SizeOfCell == 0 || Mathf.Approximately(Scalar, 0.0f))
+			{
+				return Vector2Int.one * -1;
+			}
 
+			float xMin = _minPosition.x;
+			float zOrYMin = ZAxisIsPlane ? _minPosition.z : _minPosition.y;
+
+			float deltaX = point.x - xMin;
+			float deltaZOrY = (ZAxisIsPlane ? point.z : point.y) - zOrYMin;
+
+			int x = Mathf.RoundToInt(deltaX / (SizeOfCell * Scalar));
+			int z = Mathf.RoundToInt(deltaZOrY / (SizeOfCell * Scalar));
+
+			x = Mathf.Clamp(x, 0, _widthCount - 1);
+			z = Mathf.Clamp(z, 0, _heightCount - 1);
+			return new Vector2Int(x, z);
+		}
+		
 		public Vector3 GetPosition(int x, int y)
 		{
 			if (Width == 0 || Height == 0 || SizeOfCell == 0 || Mathf.Approximately(Scalar, 0.0f))
