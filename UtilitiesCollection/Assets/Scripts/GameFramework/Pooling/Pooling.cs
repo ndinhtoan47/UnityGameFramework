@@ -62,49 +62,57 @@
 	}
 
 	public class ItemWrapper<T> : IPoolable
+{
+	private static int _uniquePoolId = 0;
+
+	public readonly T Obj;
+	public readonly int PoolId;
+	private int _id;
+	private Pooling<ItemWrapper<T>> _pool;
+	private static Dictionary<int, Action<T>> s_releaseFunc;
+
+	public static void SetReleaseFunc(int uniquePoolId, Action<T> releaseFunc)
 	{
-		public readonly T Obj;
-		public readonly int PoolId;
-		private int _id;
-		private Pooling<ItemWrapper<T>> _pool;
-		private static Dictionary<int, Action<T>> s_releaseFunc;
+		if (s_releaseFunc == null)
+		{
+			s_releaseFunc = new Dictionary<int, Action<T>>();
+		}
+		s_releaseFunc[uniquePoolId] = releaseFunc;
+	}
 
-		public static void SetReleaseFunc(int poolId, Action<T> releaseFunc)
-		{
-			if (s_releaseFunc == null)
-			{
-				s_releaseFunc = new Dictionary<int, Action<T>>();
-			}
-			s_releaseFunc[poolId] = releaseFunc;
-		}
-		public ItemWrapper(int poolId, T obj)
-		{
-			PoolId = poolId;
-			Obj = obj;
-		}
+	public static int NewPoolId()
+	{
+		return ++_uniquePoolId;
+	}
 
-		public int GetId()
+	public ItemWrapper(int poolId, T obj)
+	{
+		PoolId = poolId;
+		Obj = obj;
+	}
+
+	public int GetId()
+	{
+		return _id;
+	}
+	public void Release()
+	{
+		if (s_releaseFunc != null && s_releaseFunc.ContainsKey(PoolId))
 		{
-			return _id;
-		}
-		public void Release()
-		{
-			if (s_releaseFunc != null && s_releaseFunc.ContainsKey(PoolId))
-			{
-				s_releaseFunc[PoolId]?.Invoke(Obj);
-			}
-		}
-		public void SetId(int id)
-		{
-			_id = id;
-		}
-		public void SetPooling<U>(Pooling<U> pool) where U : IPoolable
-		{
-			_pool = pool as Pooling<ItemWrapper<T>>;
-		}
-		public void GetBackPool()
-		{
-			_pool.GetBack(this);
+			s_releaseFunc[PoolId]?.Invoke(Obj);
 		}
 	}
+	public void SetId(int id)
+	{
+		_id = id;
+	}
+	public void SetPooling<U>(Pooling<U> pool) where U : IPoolable
+	{
+		_pool = pool as Pooling<ItemWrapper<T>>;
+	}
+	public void GetBackPool()
+	{
+		_pool.GetBack(this);
+	}
+}
 }
