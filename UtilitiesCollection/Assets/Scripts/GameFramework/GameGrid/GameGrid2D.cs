@@ -98,6 +98,22 @@
 			return GetPosition(x, z);
 		}
 		
+		public void Recalculate()
+		{
+			_points = null;
+			_widthCount = Width / SizeOfCell;
+			_heightCount = Height / SizeOfCell;
+			_minPosition = transform.position;
+		}
+
+		public void SetSize(int w, int h)
+		{
+			Width = w;
+			Height = h;
+			Recalculate();
+		}
+
+		
 		public Vector2Int GetGridIndex(Vector3 point)
 		{
 			if (SizeOfCell == 0 || (IsCachePoints && _points == null))
@@ -179,11 +195,8 @@
 			}
 
 
-			_points = null;
-			_widthCount = Width / SizeOfCell;
-			_heightCount = Height / SizeOfCell;
-			_minPosition = transform.position;
-
+			Recalculate();
+			
 			if (IsCachePoints)
 			{
 				_points = new Vector3[_heightCount * _widthCount];
