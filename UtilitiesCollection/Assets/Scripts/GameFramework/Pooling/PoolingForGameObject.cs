@@ -90,6 +90,18 @@ namespace GameFramework.Pattern
 				}
 			}	
 		}
+		public void GetBackAll()
+		{
+			if (_pools == null)
+			{
+				return;
+			}
+
+			foreach (KeyValuePair<int, Pooling> kvpPool in _pools)
+			{
+				kvpPool.Value.GetBackAll();
+			}
+		}
 	}
 }
 
