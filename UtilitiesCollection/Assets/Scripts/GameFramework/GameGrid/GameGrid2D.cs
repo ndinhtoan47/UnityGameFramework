@@ -13,6 +13,7 @@
 		public int Height = 1;
 		public int SizeOfCell = 1;
 		public bool ZAxisIsPlane = true;
+		public bool IsUseRoundMethod = true;
 		public bool IsCachePoints = false;
 
 		/// <summary>
@@ -68,52 +69,24 @@
 		}
 
 		////Uncomment this block to test result
-		
-		//private void Update()
-		//{
-		//	the camera should be perpendicular with y Or z axis
-		//	Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-		//	Debug.Log(Snap(worldPoint));
-		//}
+
+		// private void Update()
+		// {
+		// 	// the camera should be perpendicular with y Or z axis
+		// 	Vector3 screenPoint = Input.mousePosition;
+		// 	screenPoint.z = 1000.0f;
+		// 	Vector3 worldPoint = _testCam.ScreenToWorldPoint(screenPoint);
+		// 	// Debug.Log("screenPoint " + screenPoint);
+		// 	// Debug.Log("worldPoint " + worldPoint);
+		// 	// Debug.Log("snap result " + Snap(worldPoint));
+		// }
 
 		public Vector3 Snap(Vector3 point)
 		{
-			if (SizeOfCell == 0 || (IsCachePoints && _points == null))
-			{
-				return Vector3.one * -1.0f;
-			}
-
-			float xMin = _minPosition.x;
-			float zOrYMin = ZAxisIsPlane ? _minPosition.z : _minPosition.y;
-
-			float deltaX = point.x - xMin;
-			float deltaZOrY = (ZAxisIsPlane ? point.z : point.y) - zOrYMin;
-
-			int x = Mathf.RoundToInt(deltaX / (SizeOfCell * Scalar));
-			int z = Mathf.RoundToInt(deltaZOrY / (SizeOfCell * Scalar));
-
-			x = Mathf.Clamp(x, 0, _widthCount - 1);
-			z = Mathf.Clamp(z, 0, _heightCount - 1);
-
-			return GetPosition(x, z);
-		}
-		
-		public void Recalculate()
-		{
-			_points = null;
-			_widthCount = Width / SizeOfCell;
-			_heightCount = Height / SizeOfCell;
-			_minPosition = transform.position;
+			Vector2Int index = GetGridIndex(point);
+			return GetPosition(index.x, index.y);
 		}
 
-		public void SetSize(int w, int h)
-		{
-			Width = w;
-			Height = h;
-			Recalculate();
-		}
-
-		
 		public Vector2Int GetGridIndex(Vector3 point)
 		{
 			if (SizeOfCell == 0 || (IsCachePoints && _points == null))
@@ -131,14 +104,25 @@
 			float deltaX = point.x - xMin;
 			float deltaZOrY = (ZAxisIsPlane ? point.z : point.y) - zOrYMin;
 
-			int x = Mathf.RoundToInt(deltaX / (SizeOfCell * Scalar));
-			int z = Mathf.RoundToInt(deltaZOrY / (SizeOfCell * Scalar));
+			int x = 0;
+			int z = 0;
 
-			x = Mathf.Clamp(x, 0, _widthCount - 1);
-			z = Mathf.Clamp(z, 0, _heightCount - 1);
+			if (IsUseRoundMethod)
+			{
+				x = Mathf.RoundToInt(deltaX / (SizeOfCell * Scalar));
+				z = Mathf.RoundToInt(deltaZOrY / (SizeOfCell * Scalar));
+			}
+			else
+			{
+				x = Mathf.FloorToInt(deltaX / (SizeOfCell * Scalar));
+				z = Mathf.FloorToInt(deltaZOrY / (SizeOfCell * Scalar));
+			}
+			// Debug.Log("GetGridIndex " + x + " : " + z);
+			// x = Mathf.Clamp(x, 0, _widthCount - 1);
+			// z = Mathf.Clamp(z, 0, _heightCount - 1);
 			return new Vector2Int(x, z);
 		}
-		
+
 		public Vector3 GetPosition(int x, int y)
 		{
 			if (Width == 0 || Height == 0 || SizeOfCell == 0 || Mathf.Approximately(Scalar, 0.0f))
@@ -182,6 +166,21 @@
 			return result;
 		}
 
+		public void Recalculate()
+		{
+			_points = null;
+			_widthCount = Width / SizeOfCell;
+			_heightCount = Height / SizeOfCell;
+			_minPosition = transform.position;
+		}
+
+		public void SetDimension(int w, int h)
+		{
+			Width = w;
+			Height = h;
+			Recalculate();
+		}
+
 #if UNITY_EDITOR
 
 		[ContextMenu("Calculate Grid")]
@@ -196,7 +195,7 @@
 
 
 			Recalculate();
-			
+
 			if (IsCachePoints)
 			{
 				_points = new Vector3[_heightCount * _widthCount];
@@ -255,8 +254,18 @@
 				}
 				else
 				{
-					int x = i / largestSide;
-					int y = i % largestSide;
+					int x = 0;
+					int y = 0;
+					if (_widthCount > _heightCount)
+					{
+						x = i % largestSide;
+						y = i / largestSide;
+					}
+					else
+					{
+						x = i / largestSide;
+						y = i % largestSide;
+					}
 
 					p = GetPosition(x, y);
 				}
