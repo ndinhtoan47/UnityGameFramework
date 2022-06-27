@@ -1,4 +1,4 @@
-﻿namespace GameFramework.SceneUtils
+﻿namespace GameFramework.Utilities
 {
 
     using UnityEngine;
