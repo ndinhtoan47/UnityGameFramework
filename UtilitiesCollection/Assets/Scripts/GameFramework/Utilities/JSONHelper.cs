@@ -1,5 +1,10 @@
-﻿namespace GameFramework
+﻿#define NEWTONSOFT_JSON
+//// Let comment/ uncomment below line to use/ remove this helper
+// #undef NEWTONSOFT_JSON
+
+namespace GameFramework
 {
+#if NEWTONSOFT_JSON
     using Newtonsoft.Json.Linq;
     using GameFramework.Logging;
 
@@ -90,4 +95,5 @@
             }
         }
     }
+#endif
 }
