@@ -1,10 +1,10 @@
-﻿#define NEWTONSOFT_JSON
+﻿#define GF_USE_NEWTONSOFT_JSON
 //// Let comment/ uncomment below line to use/ remove this helper
-// #undef NEWTONSOFT_JSON
+// #undef GF_USE_NEWTONSOFT_JSON
 
-namespace GameFramework
+namespace GameFramework.Utilities
 {
-#if NEWTONSOFT_JSON
+#if GF_USE_NEWTONSOFT_JSON
     using Newtonsoft.Json.Linq;
     using GameFramework.Logging;
 
