@@ -5,7 +5,7 @@ namespace GameFramework.Pattern
 	using Pooling = Pooling<ItemWrapper<UnityEngine.GameObject>>;
 
 	[System.Serializable]
-	class PoolRef
+	public class PoolRef
 	{
 		public int internalPoolId;
 		public int uniquePoolId;
@@ -72,6 +72,21 @@ namespace GameFramework.Pattern
 				return null;
 			}
 			return _pools[internalPoolId];
+		}
+
+		public PoolRef GetPoolRef(int internalPoolId)
+		{
+			if (_poolRefs != null)
+			{
+				for (int i = 0; i < _poolRefs.Count; i++)
+				{
+					if (_poolRefs[i].internalPoolId == internalPoolId)
+					{
+						return _poolRefs[i];
+					}
+				}
+			}
+			return null;
 		}
 
 		public void SetPoolingReleseFunc(int internalPoolId, System.Action<GameObject> releaseFunc)
