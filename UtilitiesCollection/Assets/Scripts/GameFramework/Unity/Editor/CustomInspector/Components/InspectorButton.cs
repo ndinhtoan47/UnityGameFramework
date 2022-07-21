@@ -5,8 +5,9 @@ namespace GameFramework.CustomEditor.Components
 	using System.Reflection;
 	using System.Collections.Generic;
 	using UnityEditor;
+    using GameFramework.CustomAttribute;
 
-	public class InspectorButton : ICustomInspectorDrawer
+    public class InspectorButton : ICustomInspectorDrawer
 	{
 		protected struct ButtonAction
 		{
@@ -26,6 +27,11 @@ namespace GameFramework.CustomEditor.Components
 
 		public void DrawInspectorGUI()
 		{
+            if (actions == null || actions.Count == 0)
+            {
+                return;
+            }
+
 			_isFoldout = EditorGUILayout.Foldout(_isFoldout, "Inspector Buttons");
 			if (_isFoldout)
 			{

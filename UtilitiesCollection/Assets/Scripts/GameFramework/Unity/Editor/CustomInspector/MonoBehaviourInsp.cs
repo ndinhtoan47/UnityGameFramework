@@ -2,24 +2,19 @@ namespace GameFramework.CustomEditor
 {
 	using UnityEditor;
 	using UnityEngine;
-	using System.Reflection;
 	using System.Collections.Generic;
 	using GameFramework.CustomEditor.Components;
 
 	public enum EInspectorComponent
 	{
 		InspectorButton = 1,
-	}
+		InspectorDropdown = 2,
+    }
 
 
 	[CustomEditor(typeof(MonoBehaviour), true)]
 	public class MonoBehaviourInsp : Editor
 	{
-		protected struct ButtonAction
-		{
-			public MethodInfo methodInfo;
-			public InspectorButtonAttribute attribute;
-		}
 
 		protected MonoBehaviour targetBehaviour = null;
 
@@ -67,6 +62,7 @@ namespace GameFramework.CustomEditor
 		protected virtual void RegisterComponents()
 		{
 			RegisterComponent(new InspectorButton());
+            RegisterComponent(new InspectorDropdown());
 		}
 		protected void RegisterComponent(ICustomInspectorDrawer drawer)
 		{

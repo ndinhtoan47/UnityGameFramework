@@ -1,4 +1,4 @@
-namespace GameFramework.CustomEditor
+namespace GameFramework.CustomAttribute
 {
 	/// <summary>
 	/// Read Only attribute.

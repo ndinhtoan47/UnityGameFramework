@@ -1,4 +1,4 @@
-namespace GameFramework.CustomEditor
+namespace GameFramework.CustomAttribute
 {
 
 	[System.AttributeUsage(System.AttributeTargets.Method, AllowMultiple = false, Inherited = true)]

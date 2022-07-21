@@ -1,7 +1,7 @@
 ﻿namespace GameFramework.Grid
 {
 	using UnityEngine;
-	using GameFramework.CustomEditor;
+	using GameFramework.CustomAttribute;
 
 	/// <summary>
 	/// Grid snap

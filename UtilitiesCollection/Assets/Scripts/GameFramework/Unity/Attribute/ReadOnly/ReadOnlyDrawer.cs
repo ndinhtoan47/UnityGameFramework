@@ -3,7 +3,7 @@ namespace GameFramework.CustomEditor
 	/// <summary>
 	/// This class contain custom drawer for ReadOnly attribute.
 	/// </summary>
-	[UnityEditor.CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
+	[UnityEditor.CustomPropertyDrawer(typeof(GameFramework.CustomAttribute.ReadOnlyAttribute))]
     public class ReadOnlyDrawer : UnityEditor.PropertyDrawer
     {
         /// <summary>

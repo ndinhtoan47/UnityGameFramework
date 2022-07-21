@@ -20,8 +20,8 @@ namespace Algorithms
 
 	public interface IQuadNode
 	{
-		public uint GetId();
-		public RectInt GetRect();
+		uint GetId();
+		RectInt GetRect();
 	}
 
 	public class QuadTree<QNode> where QNode : IQuadNode
