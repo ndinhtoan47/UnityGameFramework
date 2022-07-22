@@ -2,7 +2,7 @@ namespace GameFramework.Pattern
 {
     using System.Collections.Generic;
 
-    using EventWrapper = WrapperById<EventReceiver>;
+    using EventWrapper = GameFramework.Common.WrapperById<EventReceiver>;
     
     public delegate void EventReceiver(params object[] args);
 

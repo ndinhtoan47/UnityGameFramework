@@ -1,4 +1,4 @@
-namespace GameFramework
+namespace GameFramework.Common
 {
     /// <summary>
     /// The structure uses to wrap an object type of <c>T</c>, to give it an id

@@ -1,4 +1,4 @@
-﻿namespace GameFramework
+﻿namespace GameFramework.Common
 {    
     public interface ICloneable<T>
     {

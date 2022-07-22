@@ -1,6 +1,6 @@
 {
-    "name": "GameFramework",
-    "rootNamespace": "GameFramework",
+    "name": "GameFramework.Logging",
+    "rootNamespace": "GameFramework.Logging",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

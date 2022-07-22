@@ -91,6 +91,13 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "dev.n5y.asmdefhelper": {
+      "version": "https://github.com/naninunenoy/AsmdefHelper.git?path=Assets",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "fb2b3228c0482065cb78c86e69e560789f0ec31d"
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,

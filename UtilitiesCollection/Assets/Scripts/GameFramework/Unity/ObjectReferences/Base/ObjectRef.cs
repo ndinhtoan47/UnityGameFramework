@@ -1,4 +1,4 @@
-﻿namespace GameFramework.Storage
+﻿namespace GameFramework.Unity.ObjectReferences
 {
 	public class ObjectRef<T> : UnityEngine.ScriptableObject
 	{

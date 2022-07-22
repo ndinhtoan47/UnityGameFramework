@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
-using GameFramework.Storage;
+using GameFramework.Unity.ObjectReferences;
 using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "SpriteRef", menuName = "Game/SpriteRef", order = 1)]

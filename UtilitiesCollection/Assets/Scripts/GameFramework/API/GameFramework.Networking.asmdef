@@ -1,7 +1,10 @@
 {
-    "name": "GameFramework",
-    "rootNamespace": "GameFramework",
-    "references": [],
+    "name": "GameFramework.Networking",
+    "rootNamespace": "GameFramework.Networking",
+    "references": [
+        "GUID:8bba1531593085f4896f664630f5f8e3",
+        "GUID:858b4adc7e8484b49b3f1c0730b11812"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

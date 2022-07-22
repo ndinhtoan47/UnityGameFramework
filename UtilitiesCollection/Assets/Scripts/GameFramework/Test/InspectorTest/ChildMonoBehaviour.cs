@@ -1,15 +1,18 @@
-using UnityEngine;
-
-public class ChildMonoBehaviour : BaseMonoBehaviour
+namespace GameFramework.Test
 {
-	[GameFramework.CustomAttribute.InspectorButton]
-	public void OneChildButton()
-	{
-		Debug.Log("Call From Child Function");
-	}
+    using UnityEngine;
 
-	public override void Function1()
-	{
-		Debug.Log("Function1 overrided");
-	}
+    public class ChildMonoBehaviour : BaseMonoBehaviour
+    {
+        [GameFramework.CustomAttribute.InspectorButton]
+        public void OneChildButton()
+        {
+            Debug.Log("Call From Child Function");
+        }
+
+        public override void Function1()
+        {
+            Debug.Log("Function1 overrided");
+        }
+    }
 }

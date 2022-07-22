@@ -1,4 +1,4 @@
-﻿namespace GameFramework.API
+﻿namespace GameFramework.Networking.API
 {
     using System;
     using UnityEngine;

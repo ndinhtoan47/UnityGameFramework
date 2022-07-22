@@ -1,4 +1,4 @@
-namespace Algorithms
+namespace GameFramework.Algorithms
 {
 	using System.Collections.Generic;
 

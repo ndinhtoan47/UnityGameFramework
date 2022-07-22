@@ -1,4 +1,4 @@
-namespace GameFramework.CustomEditor.Components
+namespace GameFramework.Unity.Editor.Components
 {
     using System;
     using UnityEngine;
@@ -6,6 +6,7 @@ namespace GameFramework.CustomEditor.Components
     using System.Reflection;
     using System.Collections.Generic;
     using GameFramework.CustomAttribute;
+    using GameFramework.Unity.Editor.CustomInspector;
 
     public class InspectorButton : ICustomInspectorDrawer
     {

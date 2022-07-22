@@ -1,4 +1,4 @@
-﻿namespace GameFramework.Grid
+﻿namespace GameFramework.Unity.GameGrid
 {
 	using UnityEngine;
 	using GameFramework.CustomAttribute;

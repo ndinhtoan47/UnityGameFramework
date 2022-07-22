@@ -1,9 +1,9 @@
-namespace GameFramework.CustomEditor
+namespace GameFramework.Unity.Editor.CustomInspector
 {
 	using UnityEditor;
 	using UnityEngine;
 	using System.Collections.Generic;
-	using GameFramework.CustomEditor.Components;
+	using GameFramework.Unity.Editor.Components;
 
 	public enum EInspectorComponent
 	{

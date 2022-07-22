@@ -1,8 +1,12 @@
 {
-    "name": "GameFramework",
-    "rootNamespace": "GameFramework",
-    "references": [],
-    "includePlatforms": [],
+    "name": "GameFramework.Test",
+    "rootNamespace": "GameFramework.Test",
+    "references": [
+        "GUID:c60c3d3a4949282449863017dd267dab"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

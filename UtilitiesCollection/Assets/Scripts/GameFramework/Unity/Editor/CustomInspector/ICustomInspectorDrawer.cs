@@ -1,4 +1,4 @@
-namespace GameFramework.CustomEditor
+namespace GameFramework.Unity.Editor.CustomInspector
 {
 	public interface ICustomInspectorDrawer : System.IComparable
 	{

@@ -1,6 +1,6 @@
 {
-    "name": "GameFramework",
-    "rootNamespace": "GameFramework",
+    "name": "GameFramework.Unity",
+    "rootNamespace": "GameFramework.Unity",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

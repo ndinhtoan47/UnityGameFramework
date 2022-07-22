@@ -1,4 +1,4 @@
-﻿namespace GameFramework.API
+﻿namespace GameFramework.Networking.API
 {
     public enum APIMethod
     {
@@ -8,7 +8,7 @@
         DELETE = 3,
     }
 
-    public class EndPoint : ICloneable<EndPoint>
+    public class EndPoint : GameFramework.Common.ICloneable<EndPoint>
     {    
         public string ResourceAt;
         public APIMethod Method;

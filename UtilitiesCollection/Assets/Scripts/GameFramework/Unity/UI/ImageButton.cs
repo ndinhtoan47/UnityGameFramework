@@ -1,4 +1,4 @@
-namespace GameFramework.UI
+namespace GameFramework.Unity.UI
 {
 	using UnityEngine;
 	using UnityEngine.Events;

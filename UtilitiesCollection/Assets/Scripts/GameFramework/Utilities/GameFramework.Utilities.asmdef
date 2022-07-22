@@ -1,7 +1,10 @@
 {
-    "name": "GameFramework",
-    "rootNamespace": "GameFramework",
-    "references": [],
+    "name": "GameFramework.Utilities",
+    "rootNamespace": "GameFramework.Utilities",
+    "references": [
+        "GUID:858b4adc7e8484b49b3f1c0730b11812",
+        "GUID:a266c7e29e5eb224eacbda8cdb5f6ca0"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

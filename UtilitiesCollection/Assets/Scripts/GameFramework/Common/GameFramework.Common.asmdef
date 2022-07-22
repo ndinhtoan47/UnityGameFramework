@@ -1,6 +1,6 @@
 {
-    "name": "GameFramework",
-    "rootNamespace": "GameFramework",
+    "name": "GameFramework.Common",
+    "rootNamespace": "GameFramework.Common",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
