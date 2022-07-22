@@ -1,24 +1,62 @@
 namespace GameFramework.CustomEditor
 {
     using System;
-    using System.Collections.Generic;
-    using System.Reflection;
+    using UnityEditor;
     using UnityEngine;
-    using GameFramework.CustomAttribute;
+    using System.Reflection;
     using System.Collections;
+    using System.Collections.Generic;
+    using GameFramework.CustomAttribute;
 
     public class InspectorDropdown : ICustomInspectorDrawer
     {
-        protected class DropdownInfo
+        private class DropdownInfo
         {
             public int Current;
-            public string FieldName;
-            public IEnumerable Values;
-            public Action<int> OnValueChanged;
+            public string[] DropdownValues;
+            public MethodInfo OnValueChanged;
+
+            public readonly string FieldName;
+            public readonly IEnumerable Values;
+
+            public DropdownInfo(string fieldName, IEnumerable values)
+            {
+                Current = 0;
+                Values = values;                
+                FieldName = SplitCamelCase(fieldName);
+                DropdownValues = InspectorDropdown.CreateDropdownValues(values).ToArray();
+            }
+        }
+        private struct DropdownGUIDefine
+        {
+            // Dropdown
+            public Vector2 DDSize;
+            public float DDLineSpace;
+            public float DDIndentation;
+
+            // Label
+            public Vector2 LBSize;
+
+            // Reset btn
+            public Vector2 BTResetDD;
         }
 
-        protected MonoBehaviour targetBehaviour = null;
-        protected List<DropdownInfo> actions = null;
+        private readonly string[] NoneArray = new string[] { "None" };
+        private readonly DropdownGUIDefine DDGUIDefine = new DropdownGUIDefine()
+        {
+            DDSize = new Vector2(200.0f, 20.0f),
+            DDLineSpace = 5.0f,
+            DDIndentation = 80.0f,
+
+            LBSize = new Vector2(100.0f, 20.0f),
+            BTResetDD = new Vector2(50.0f, 20.0f),
+        };
+
+        private bool _isFoldout = false;
+        private Vector2 _scrollViewPosition = Vector2.zero;
+
+        private MonoBehaviour _targetBehaviour = null;
+        private List<DropdownInfo> _dropdownInfos = null;
 
         public int CompareTo(object obj)
         {
@@ -35,36 +73,51 @@ namespace GameFramework.CustomEditor
 
         public void DrawInspectorGUI()
         {
-            if (actions == null || actions.Count == 0)
+            if (_dropdownInfos == null || _dropdownInfos.Count == 0)
             {
                 return;
             }
-            GUILayout.BeginVertical();
-            for (int i = 0; i < actions.Count; i++)
+
+            _isFoldout = EditorGUILayout.Foldout(_isFoldout, "Inspector Dropdowns");
+            if (_isFoldout)
             {
-                DrawOneDropdown(actions[i], i);
+                GUILayout.BeginScrollView(_scrollViewPosition, GUILayout.Width(300.0f), GUILayout.ExpandHeight(true));
+                GUILayout.BeginVertical();
+                for (int i = 0; i < _dropdownInfos.Count; i++)
+                {
+                    DropdownInfo info = _dropdownInfos[i];
+                    int lastIndex = info.Current;
+                    int selectedIndex = DrawOneDropdown(info, i);
+                    if(lastIndex != selectedIndex && info.OnValueChanged != null)
+                    {
+                        info.Current = selectedIndex;
+                        info.OnValueChanged.Invoke(_targetBehaviour, new object[] { selectedIndex });
+                    }
+                }
+                GUILayout.EndVertical();
+                GUILayout.EndScrollView();
             }
-            GUILayout.EndVertical();
         }
 
         public EInspectorComponent GetComponentType() => EInspectorComponent.InspectorDropdown;
 
         public void Reload(UnityEngine.Object target)
         {
-            targetBehaviour = target as MonoBehaviour;
-            if (actions == null)
+            _targetBehaviour = target as MonoBehaviour;
+            if (_dropdownInfos == null)
             {
-                actions = new List<DropdownInfo>();
+                _dropdownInfos = new List<DropdownInfo>();
             }
-            actions.Clear();
+            _dropdownInfos.Clear();
 
             BindingFlags allMembers =
                                 BindingFlags.Instance |
                                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy;
 
-            Type targetType = targetBehaviour.GetType();
+            Type targetType = _targetBehaviour.GetType();
             FieldInfo[] fieldInfos = targetType.GetFields(allMembers);
 
+            BindingFlags callbackMethods = BindingFlags.Instance | BindingFlags.CreateInstance | BindingFlags.Public | BindingFlags.NonPublic;
             for (int i = 0; i < fieldInfos.Length; i++)
             {
                 InspectorDropdownAttribute att = fieldInfos[i].GetCustomAttribute(typeof(InspectorDropdownAttribute)) as InspectorDropdownAttribute;
@@ -72,33 +125,56 @@ namespace GameFramework.CustomEditor
                 {
                     // Currently, don't support parameter for inspector button
                     object field = fieldInfos[i].GetValue(target);
-                    Debug.Log(field);
                     if (field is IEnumerable)
                     {
-                        actions.Add(new DropdownInfo()
+                        DropdownInfo info = new DropdownInfo(fieldInfos[i].Name, fieldInfos[i].GetValue(target) as IEnumerable);
+                        if (!string.IsNullOrEmpty(att.OnValueChanged))
                         {
-                            Current = 0,
-                            FieldName = fieldInfos[i].Name,
-                            Values = fieldInfos[i].GetValue(target) as IEnumerable,
-                            OnValueChanged = att.OnValueChanged,
-                        });
+                            info.OnValueChanged = targetType.GetMethod(att.OnValueChanged, callbackMethods); 
+                        }
+                        _dropdownInfos.Add(info);
                     }
                 }
             }
         }
-        private static readonly Rect rect = new Rect(0, 0, 200, 20);
-        private void DrawOneDropdown(DropdownInfo info, int index)
+
+        private int DrawOneDropdown(DropdownInfo info, int index)
         {
             GUILayout.BeginHorizontal();
-            List<string> items = new List<string>();
-            IEnumerator enumerator = info.Values.GetEnumerator();
-            while(enumerator.MoveNext())
+            if (GUILayout.Button("Reset", GUILayout.Width(DDGUIDefine.BTResetDD.x), GUILayout.Height(DDGUIDefine.BTResetDD.y)))
             {
-                items.Add("" + enumerator.Current);
+                Reload(_targetBehaviour);
             }
-            GUILayout.Label(info.FieldName);
-            info.Current = UnityEditor.EditorGUI.Popup(new Rect(0.0f, 50.0f + index * 25.0f, 200, 20), info.Current, items.ToArray());
+            GUILayout.Label(info.FieldName, GUILayout.Width(DDGUIDefine.LBSize.x));
+
+            string[] items = info.DropdownValues.Length > 0 ? info.DropdownValues : NoneArray;
+
+            Rect ddRect = new Rect(DDGUIDefine.LBSize.x + DDGUIDefine.DDIndentation, index * (DDGUIDefine.DDSize.y + DDGUIDefine.DDLineSpace), DDGUIDefine.DDSize.x, DDGUIDefine.DDSize.y);
+            info.Current = EditorGUI.Popup(
+                ddRect,
+                info.Current,
+                items);
+
             GUILayout.EndHorizontal();
+            return info.Current;
+        }
+        
+        private static List<string> CreateDropdownValues(IEnumerable enumerable)
+        {
+            List<string> items = new List<string>();
+            IEnumerator enumerator = enumerable.GetEnumerator();
+            int count = 0;
+            while (enumerator.MoveNext())
+            {
+                items.Add(count + " :: " + enumerator.Current);
+                count++;
+            }
+            return items;
+        }
+
+        public static string SplitCamelCase(string input)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(input, "([A-Z])", " $1", System.Text.RegularExpressions.RegexOptions.Compiled).Trim();
         }
     }
 }

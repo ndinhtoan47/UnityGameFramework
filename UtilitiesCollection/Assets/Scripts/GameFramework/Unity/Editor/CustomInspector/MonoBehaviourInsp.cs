@@ -22,8 +22,7 @@ namespace GameFramework.CustomEditor
 		protected bool isDrawDefault = true;
 		protected List<ICustomInspectorDrawer> drawers;
 
-
-		private void Draw()
+        private void Draw()
 		{
 			if (drawers != null)
 			{
@@ -80,8 +79,7 @@ namespace GameFramework.CustomEditor
 		// Unity methods
 		protected virtual void OnEnable()
 		{
-			_reloadInternal = true;
-			this.Validate();
+			Reload();
 		}
 
 		public override void OnInspectorGUI()
@@ -99,6 +97,11 @@ namespace GameFramework.CustomEditor
 			}
 		}
 
+		protected virtual void Reload()
+        {
+			_reloadInternal = true;
+			this.Validate();
+		}
 		// -- Unity methods
 	}
 }

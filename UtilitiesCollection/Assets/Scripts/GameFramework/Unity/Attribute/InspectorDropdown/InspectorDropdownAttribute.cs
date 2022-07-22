@@ -1,10 +1,11 @@
 namespace GameFramework.CustomAttribute
 {
-    [System.AttributeUsage(System.AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
-
-    public class InspectorDropdownAttribute : System.Attribute
+    public class InspectorDropdownAttribute : UnityEngine.PropertyAttribute
     {
-        public System.Action<int> OnValueChanged;
+        /// <summary>
+        /// Callback name is delegate System.Action<int>
+        /// </summary>
+        public string OnValueChanged;
 
         public InspectorDropdownAttribute()
         {

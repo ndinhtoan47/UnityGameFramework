@@ -312,6 +312,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c08409a8a640834bb28df96c03d3df0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testArray:
+  - {x: 0, y: 2, z: 0}
+  - {x: 0, y: 2, z: 0}
+  - {x: 1, y: 2, z: 0}
+  - {x: 1, y: 5, z: 0}
+  - {x: 1, y: 2, z: 0}
+  testList:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  testString: 
 --- !u!1 &1375375873
 GameObject:
   m_ObjectHideFlags: 0

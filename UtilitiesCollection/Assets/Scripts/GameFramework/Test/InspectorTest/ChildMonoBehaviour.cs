@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ChildMonoBehaviour : BaseMonoBehaviour
 {
-	[GameFramework.CustomAttribute.InspectorButton(nameof(OneChildButton))]
+	[GameFramework.CustomAttribute.InspectorButton]
 	public void OneChildButton()
 	{
 		Debug.Log("Call From Child Function");

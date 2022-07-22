@@ -1,17 +1,28 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameFramework.CustomAttribute;
 
 [RequireComponent(typeof(Camera))]
 public class CameraFrus : MonoBehaviour
 {
-    [GameFramework.CustomAttribute.InspectorDropdown]
+    [InspectorDropdown(OnValueChanged = nameof(OnTestArrayChangeIndex))]
     public Vector3[] testArray;
 
-    [GameFramework.CustomAttribute.InspectorDropdown]
+    [InspectorDropdown]
     public List<Vector3> testList;
 
+    private void OnTestArrayChangeIndex(int index)
+    {
+        Debug.Log(index);
+    }
+
+    public string testString;
+
     private new Camera camera;
+
+    [InspectorButton]
     private void Awake()
     {
         camera = GetComponent<Camera>();
