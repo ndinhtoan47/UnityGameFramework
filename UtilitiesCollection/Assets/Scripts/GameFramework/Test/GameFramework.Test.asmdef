@@ -4,10 +4,28 @@
     "references": [
         "GUID:c60c3d3a4949282449863017dd267dab"
     ],
-    "includePlatforms": [
-        "Editor"
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "Android",
+        "CloudRendering",
+        "Editor",
+        "GameCoreScarlett",
+        "GameCoreXboxOne",
+        "iOS",
+        "LinuxStandalone64",
+        "Lumin",
+        "macOSStandalone",
+        "PS4",
+        "PS5",
+        "Stadia",
+        "Switch",
+        "tvOS",
+        "WSA",
+        "WebGL",
+        "WindowsStandalone32",
+        "WindowsStandalone64",
+        "XboxOne"
     ],
-    "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],

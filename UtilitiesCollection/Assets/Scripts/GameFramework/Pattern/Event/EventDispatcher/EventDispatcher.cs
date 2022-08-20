@@ -39,7 +39,7 @@ namespace GameFramework.Pattern
 
         public bool Unsubcribe(string eventKey, EventWrapper wrapper)
         {
-            return InternalUnsubscribe(eventKey, wrapper.id);
+            return InternalUnsubscribe(eventKey, wrapper.Id);
         }
 
         public bool Dispatch(string eventKey, params object[] args)
@@ -51,7 +51,7 @@ namespace GameFramework.Pattern
                 {
                     for (int i = 0; i < listeners.Count; i++)
                     {
-                        listeners[i].item.Invoke(args);
+                        listeners[i].Value.Invoke(args);
                     }
                 }
                 return true;
@@ -69,7 +69,7 @@ namespace GameFramework.Pattern
 
             if (_events.ContainsKey(eventKey))
             {
-                int removeIndex = _events[eventKey].FindIndex(evt => evt.id == id);
+                int removeIndex = _events[eventKey].FindIndex(evt => evt.Id == id);
                 if (removeIndex >= 0)
                 {
                     _events[eventKey].RemoveAt(removeIndex);

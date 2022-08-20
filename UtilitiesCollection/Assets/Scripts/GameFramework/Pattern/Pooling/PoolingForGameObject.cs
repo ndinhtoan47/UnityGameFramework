@@ -1,7 +1,7 @@
 namespace GameFramework.Pattern
 {
-    	using System.Collections.Generic;
 	using UnityEngine;
+    using System.Collections.Generic;
 	using Pooling = Pooling<ItemWrapper<UnityEngine.GameObject>>;
 
 	[System.Serializable]
