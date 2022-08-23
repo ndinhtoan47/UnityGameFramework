@@ -3,12 +3,12 @@ namespace GameFramework.Pattern
 {
     using System.Collections.Generic;
 
-    public class ObserverEvent<TObserver> : ISubject, System.IDisposable
+    public class BaseSubject<TObserver> : ISubject, System.IDisposable
         where TObserver : IObserver
     {
         private List<TObserver> _observers;
 
-        public ObserverEvent()
+        public BaseSubject()
         {
             _observers = new List<TObserver>();
         }
