@@ -1,6 +1,6 @@
 namespace GameFramework.Pattern
 {
-    public interface IObserver
+    public interface IObserver : System.IEquatable<IObserver>
     {
         int GetId();
         void OnNotify(ISubject subject);

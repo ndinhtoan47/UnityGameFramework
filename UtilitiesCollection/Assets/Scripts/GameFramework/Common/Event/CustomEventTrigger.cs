@@ -5,7 +5,7 @@ namespace GameFramework.Common
     using UnityEngine.EventSystems;
     using System.Collections.Generic;
 
-    public class CustomEvent
+    class Event
     {
         public EventTriggerType TriggerType;
         public UnityEvent<BaseEventData> OnTrigger;
@@ -18,7 +18,7 @@ namespace GameFramework.Common
 
 		[UnityEngine.SerializeField] private EventTrigger _triggers;
 
-		private List<CustomEvent> _events = new List<CustomEvent>();
+		private List<Event> _events = new List<Event>();
 
 		public UnityEvent<BaseEventData> GetEvent(EventTriggerType type)
 		{
@@ -56,7 +56,7 @@ namespace GameFramework.Common
 			onClickEntry.callback.AddListener((eventData) => OnEvent(type, eventData));
 			_triggers.triggers.Add(onClickEntry);
 
-			CustomEvent e = new CustomEvent
+			Event e = new Event
 			{
 				TriggerType = type,
 				OnTrigger = new UnityEvent<BaseEventData>()

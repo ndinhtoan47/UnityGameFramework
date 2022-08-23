@@ -6,7 +6,6 @@ namespace GameFramework.Pattern
     
     public delegate void EventReceiver(params object[] args);
 
-
     public sealed class EventDispatcher
     {
         private EventWrapper DefaultWrapper = new EventWrapper(uint.MinValue, null); 

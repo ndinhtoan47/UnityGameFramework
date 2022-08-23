@@ -1,9 +1,7 @@
 {
     "name": "GameFramework.Test",
     "rootNamespace": "GameFramework.Test",
-    "references": [
-        "GUID:c60c3d3a4949282449863017dd267dab"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [
         "Android",

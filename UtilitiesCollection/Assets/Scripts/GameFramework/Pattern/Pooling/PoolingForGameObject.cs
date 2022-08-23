@@ -105,6 +105,7 @@ namespace GameFramework.Pattern
 				}
 			}	
 		}
+		
 		public void GetBackAll()
 		{
 			if (_pools == null)
