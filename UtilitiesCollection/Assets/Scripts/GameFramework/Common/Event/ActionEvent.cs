@@ -7,26 +7,26 @@ namespace GameFramework.Pattern
     public class ActionEvent<TEventKey> : System.IDisposable
     {
         public readonly TEventKey Key;
-        public readonly List<EventWrapper> Events;
+        protected List<EventWrapper> _events;
 
         private uint _eventId;
         public ActionEvent(TEventKey key)
         {
             Key = key;
-            Events = new List<EventWrapper>();
+            _events = new List<EventWrapper>();
             _eventId = 0;
         }
         public void Invoke(params object[] args)
         {
-            for (int i = 0; i < Events.Count; i++)
+            for (int i = 0; i < _events.Count; i++)
             {
-                Events[i].Value.Invoke(args);
+                _events[i].Value.Invoke(args);
             }
         }
         public EventWrapper Subcribe(EventReceiver action)
         {
             EventWrapper evt = new EventWrapper(++_eventId, action);
-            Events.Add(evt);
+            _events.Add(evt);
             return evt;
         }
         public bool Unsubcribe(EventWrapper evt)
@@ -35,12 +35,12 @@ namespace GameFramework.Pattern
         }
         public bool Unsubcribe(uint eventId)
         {
-            for (int i = 0; i < Events.Count; i++)
+            for (int i = 0; i < _events.Count; i++)
             {
-                EventWrapper events = Events[i];
+                EventWrapper events = _events[i];
                 if (events.Id == eventId)
                 {
-                    Events.RemoveAt(i);
+                    _events.RemoveAt(i);
                     return true;
                 }
             }
@@ -48,7 +48,8 @@ namespace GameFramework.Pattern
         }
         public void Dispose()
         {
-            Events.Clear();
+            _events.Clear();
+            _events = null;
         }
     }
 }
