@@ -1,7 +1,7 @@
 namespace GameFramework.Pattern
 {
-    public interface IFactory<TParameter, TResult>
+    public interface IFactory<TKey, TParameter, TResult> where TKey : System.IEquatable<TKey>
     {
-        TResult Create(in TParameter parameter);
+        TResult Create(TKey key, in TParameter parameter);
     }
 }
